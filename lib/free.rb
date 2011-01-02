@@ -5,6 +5,17 @@ direc = File.dirname(__FILE__)
 
 require "#{direc}/free/version"
 
+# @author John Mair (banisterfiend)
+module Free
+
+  # Force garbage collection on an object and free its internal structures.
+  # @return nil
+  # @example
+  #   h = "hello"
+  #   h.free
+  def free() end
+end
+
 begin
   if RUBY_VERSION =~ /1.9/
     require "#{direc}/1.9/free"

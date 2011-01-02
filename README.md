@@ -1,32 +1,55 @@
-free
-===========
+nfree
+=====
 
 (C) John Mair (banisterfiend) 2010
 
-FIXME: _tagline_
+_force immediate garbage collection of Ruby objects_
 
-FIXME: _description goes here_
+free provides the `Object#free` method enabling a user to garbage
+collect an object on demand and free all its internal structures.
 
 * Install the [gem](https://rubygems.org/gems/free)
 * Read the [documentation](http://rdoc.info/github/github/banister/free/master/file/README.markdown)
 * See the [source code](http://github.com/banister/free)
 
-Example: Example description
+Example: 
 --------
 
-Example preamble
+Let's free a String:
 
-    puts "example code"
+    hello = "hello world"
+    id = hello.object_id
+    hello.free
+
+    # Note we go through the id as accessing the freed object directly
+    # may cause a segfault
+    ObjectSpace._id2ref(id) #=> RangeError: _id2ref': 0x1c1a63c is recycled object 
+
 
 Features and limitations
 -------------------------
 
-Feature List Preamble
+### Features
 
+* Can free any object (except immediate values, that do not need
+  freeing)
+* Works in both Ruby 1.8 and 1.9, MRI and YARV only.
+
+### Limitations
+
+* Beta software, beware.
+* Can be dangerous - `free` will force garbage collection on an object
+  even if references to it still exist. Trying to access an already freed object may result in unexpected behaviour or segfaults.
+  
 Contact
 -------
 
 Problems or questions contact me at [github](http://github.com/banister)
+
+Special Thanks
+--------------
+
+[Coderrr](http://coderrr.wordpress.com) for the idea
 
 
 License
