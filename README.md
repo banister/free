@@ -9,7 +9,7 @@ free provides the `Object#free` method enabling a user to garbage
 collect an object on demand and free all its internal structures.
 
 * Install the [gem](https://rubygems.org/gems/free)
-* Read the [documentation](http://rdoc.info/github/github/banister/free/master/file/README.markdown)
+* Read the [documentation](http://rdoc.info/github/banister/free/master/file/README.markdown)
 * See the [source code](http://github.com/banister/free)
 
 Example: 
