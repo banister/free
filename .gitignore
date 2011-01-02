@@ -1,0 +1,4 @@
+Makefile
+*.so
+*.o
+*.def
