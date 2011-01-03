@@ -1,12 +1,6 @@
 dlext = Config::CONFIG['DLEXT']
 direc = File.dirname(__FILE__)
 
-begin
-  require 'bones'
-rescue LoadError
-  abort '### Please install the "bones" gem ###'
-end
-
 PROJECT_NAME = "free"
 
 require 'rake/clean'
@@ -17,14 +11,6 @@ CLOBBER.include("**/*.#{dlext}", "**/*~", "**/*#*", "**/*.log", "**/*.o")
 CLEAN.include("ext/**/*.#{dlext}", "ext/**/*.log", "ext/**/*.o",
               "ext/**/*~", "ext/**/*#*", "ext/**/*.obj", "**/*#*", "**/*#*.*",
               "ext/**/*.def", "ext/**/*.pdb", "**/*_flymake*.*", "**/*_flymake")
-
-Bones do
-  name  'free'
-  authors  'John Mair (banisterfiend)'
-  email    'jrmair@gmail.com'
-  url      'http://banisterfiend.wordpress.com'
-  ignore_file '.gitignore'
-end        
 
 def apply_spec_defaults(s)
   s.name = PROJECT_NAME
