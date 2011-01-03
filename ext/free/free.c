@@ -91,7 +91,7 @@ make_deferred(RVALUE *p)
 
 #endif
 
-VALUE object_free(VALUE obj)
+VALUE rb_object_free(VALUE obj)
 {
   ID id_destructor = rb_intern("__destruct__");
 
@@ -384,10 +384,12 @@ VALUE object_free(VALUE obj)
   return destruct_value;
 }
 
-VALUE object_free_args(int argc, VALUE *argv, VALUE self)
+VALUE
+rb_object_free_args(int argc, VALUE *argv, VALUE self)
 {
-  int i;
-  for (i = 0; i < argc; i++)  object_free(argv[i]);
+  for (int i = 0; i < argc; i++)
+    rb_object_free(argv[i]);
+  
   return Qnil;  
 }
 
@@ -396,6 +398,6 @@ Init_free()
 {
   VALUE cFree = rb_define_module("Free");
   
-  rb_define_method(cFree, "free", object_free, 0);
-  rb_define_singleton_method(cFree, "free", object_free_args, -1);
+  rb_define_method(cFree, "free", rb_object_free, 0);
+  rb_define_singleton_method(cFree, "free", rb_object_free_args, -1);
 }
