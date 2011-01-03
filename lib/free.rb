@@ -8,6 +8,17 @@ require "#{direc}/free/version"
 # @author John Mair (banisterfiend)
 module Free
 
+  # Free multiple objects at once.
+  # @param [Array] args The objects to free.
+  # @return [nil] Returns nil.
+  # @example
+  #   h = "hello"
+  #   g = "goodbye"
+  #   m = "good morning"
+  #
+  #   Free.free h, g, m
+  def self.free(*args) end
+    
   # Force garbage collection on an object and free its internal structures.
   # @return [nil, Object] Return value of \_\_destruct\_\_ method (if
   #   defined) or nil (if no \_\_destruct\_\_ method)

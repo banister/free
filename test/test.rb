@@ -11,7 +11,7 @@ describe Free do
 
   ["hello", Object.new, Class.new, /hello/, [], {}, 10.5].each do |v|
     it "should free a #{v.class}" do
-      v
+
       # make sure test doesn't pass as a result of normal garbage
       # collection, so keep a reference to v
       c = v

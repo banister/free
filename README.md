@@ -50,6 +50,7 @@ Features and limitations
 * Works in both Ruby 1.8 and 1.9.
 * Some protection from freeing critical objects and immediate values.
 * Supports object destructors
+* Can free multiple objects at same time, e.g: `Free.free a, b, c`
 
 ### Limitations
 
