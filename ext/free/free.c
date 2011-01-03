@@ -46,10 +46,6 @@ typedef struct RVALUE {
     struct SCOPE   scope;
 #endif
   } as;
-#ifdef GC_DEBUG
-  const char *file;
-  int   line;
-#endif
 } RVALUE;
 
 #define RANY(o) ((RVALUE*)(o))
@@ -97,15 +93,54 @@ make_deferred(RVALUE *p)
 
 VALUE object_free(VALUE obj)
 {
-#ifdef RUBY_19
-  switch (BUILTIN_TYPE(obj)) {
+  ID id_destructor = rb_intern("__destruct__");
+
+  /* value returned by destructor */
+  VALUE destruct_value = Qnil;
+  
+  /* prevent freeing of immediates */
+  switch (TYPE(obj)) {
   case T_NIL:
   case T_FIXNUM:
   case T_TRUE:
   case T_FALSE:
-    rb_bug("obj_free() called for broken object");
+  case T_SYMBOL:
+    rb_raise(rb_eTypeError, "obj_free() called for immediate value");
     break;
   }
+
+  /* prevent freeing of *some* critical objects */
+  if ((obj == rb_cObject) ||
+      (obj == rb_cClass) ||
+      (obj == rb_cModule) ||
+      (obj == rb_cSymbol) ||
+      (obj == rb_cFixnum) ||
+      (obj == rb_cFloat) ||
+      (obj == rb_cString) ||
+      (obj == rb_cRegexp) ||
+      (obj == rb_cInteger) ||
+      (obj == rb_cArray) ||
+      (obj == rb_cNilClass) ||
+      (obj == rb_cFalseClass) ||
+      (obj == rb_cTrueClass) ||
+      (obj == rb_cNumeric) ||
+      (obj == rb_cBignum) ||
+      (obj == rb_cStruct)) 
+    rb_raise(rb_eTypeError, "obj_free() called for critical object");
+   
+  /* run destructor (if one is defined) */
+  if (rb_respond_to(obj, id_destructor))
+    destruct_value = rb_funcall(obj, id_destructor, 0);
+
+#ifdef RUBY_19
+      switch (BUILTIN_TYPE(obj)) {
+      case T_NIL:
+      case T_FIXNUM:
+      case T_TRUE:
+      case T_FALSE:
+        rb_bug("obj_free() called for broken object");
+        break;
+      }
 
   if (FL_TEST(obj, FL_EXIVAR)) {
     rb_free_generic_ivar((VALUE)obj);
@@ -346,7 +381,7 @@ VALUE object_free(VALUE obj)
 
   rb_gc_force_recycle(obj);
 
-  return Qnil;
+  return destruct_value;
 }
 
 void

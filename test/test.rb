@@ -32,4 +32,33 @@ describe Free do
       (ObjectSpace._id2ref(id)  != v || lambda { ObjectSpace._id2ref(id) } rescue true).should == true
     end
   end
+
+  it 'should run destructor before freeing object' do
+    o = Object.new
+    
+    def o.__destruct__
+      :killed
+    end
+
+    o.free.should == :killed
+  end
+
+  it 'should return nil if no destructor specified' do
+    o = Object.new
+    o.free.should == nil
+  end
+
+  it 'should raise when trying to free immediate values' do
+    [nil, 0, true, false, :symbol].each do |v|
+      lambda { v.free }.should.raise TypeError
+    end
+  end
+
+  it 'should raise when trying to free critical objects' do
+    [Object, Class, Module, Symbol, Fixnum, Float,
+     String, Regexp, Integer, Array, NilClass, FalseClass,
+     TrueClass, Numeric, Bignum, Struct].each do |v|
+      lambda { v.free }.should.raise TypeError
+    end
+  end
 end

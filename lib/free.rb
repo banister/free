@@ -9,10 +9,15 @@ require "#{direc}/free/version"
 module Free
 
   # Force garbage collection on an object and free its internal structures.
-  # @return nil
+  # @return [nil, Object] Return value of \_\_destruct\_\_ method (if
+  #   defined) or nil (if no \_\_destruct\_\_ method)
   # @example
   #   h = "hello"
-  #   h.free
+  #   def h.__destruct__
+  #     :killed
+  #   end
+  #   
+  #   h.free #=> :killed
   def free() end
 end
 

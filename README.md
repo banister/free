@@ -9,16 +9,17 @@ free provides the `Object#free` method enabling a user to garbage
 collect an object on demand and free all its internal structures.
 
 * Install the [gem](https://rubygems.org/gems/free)
-* Read the [documentation](http://rdoc.info/github/banister/free/master/file/README.markdown)
+* Read the [documentation](http://rdoc.info/github/banister/free/master/file/README.md)
 * See the [source code](http://github.com/banister/free)
 
-Example: 
---------
+Example: Freeing a String
+-------------------------
 
 Let's free a String:
 
     hello = "hello world"
     id = hello.object_id
+
     hello.free
 
     # Note we go through the id as accessing the freed object directly
@@ -26,20 +27,36 @@ Let's free a String:
     ObjectSpace._id2ref(id) #=> RangeError: _id2ref': 0x1c1a63c is recycled object 
 
 
+Example: Destructors
+--------------------
+
+Free also supports object destructors. If the `__destruct__` method is
+implemented on the object being freed it will be called before freeing
+takes place; and the return value of `free` will be the return value of `__destruct__`:
+
+    o = Object.new
+    def o.__destruct__
+      :killed
+    end
+
+    o.free #=> :killed
+
 Features and limitations
 -------------------------
 
 ### Features
 
-* Can free any object (except immediate values, that do not need
-  freeing)
-* Works in both Ruby 1.8 and 1.9, MRI and YARV only.
+* Can free any object (but be careful, see below)
+* Works in both Ruby 1.8 and 1.9.
+* Some protection from freeing critical objects and immediate values.
+* Supports object destructors
 
 ### Limitations
 
 * Beta software, beware.
-* Can be dangerous - `free` will force garbage collection on an object
-  even if references to it still exist. Trying to access an already freed object may result in unexpected behaviour or segfaults.
+* Supports MRI and YARV only.
+* Not complete protection from freeing silly things, e.g core classes. Be sensible :)
+* Can be dangerous - `free` will force garbage collection on an object even if references to it still exist. Trying to access an already freed object may result in unexpected behaviour or segfaults.
   
 Contact
 -------
