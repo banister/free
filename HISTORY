@@ -1,3 +1,6 @@
+4/1/2011 version 0.2.5
+* added Free.free() (for freeing multiple values) (credit to coderrr)
+
 4/1/2011 version 0.2.0
 * added destructors
 * added greater error checking
