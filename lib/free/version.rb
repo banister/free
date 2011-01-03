@@ -1,3 +1,3 @@
 module Free
-  VERSION = "0.2.0pre1"
+  VERSION = "0.2.0"
 end     
