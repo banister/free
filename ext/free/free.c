@@ -6,7 +6,7 @@
 #ifdef RUBY_19
 # include <ruby/io.h>
 # include <ruby/re.h>
-# include <vm_core.h>
+# include "vm_core.h"
 #else
 # include "re.h"
 # include "env.h"
