@@ -33,6 +33,17 @@ describe Free do
     end
   end
 
+  it 'should free multiple objects at once' do
+    a,b,c = 'a','b','c'
+    a_id, b_id, c_id = a.object_id, b.object_id, c.object_id
+
+    Free.free a, b, c
+
+    [a_id, b_id, c_id].each do |id|
+      (ObjectSpace._id2ref(id)  != v || lambda { ObjectSpace._id2ref(id) } rescue true).should == true
+    end
+  end
+
   it 'should run destructor before freeing object' do
     o = Object.new
     

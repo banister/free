@@ -384,10 +384,18 @@ VALUE object_free(VALUE obj)
   return destruct_value;
 }
 
+VALUE object_free_args(int argc, VALUE *argv, VALUE self)
+{
+  int i;
+  for (i = 0; i < argc; i++)  object_free(argv[i]);
+  return Qnil;  
+}
+
 void
 Init_free()
 {
   VALUE cFree = rb_define_module("Free");
   
   rb_define_method(cFree, "free", object_free, 0);
+  rb_define_singleton_method(cFree, "free", object_free_args, -1);
 }
