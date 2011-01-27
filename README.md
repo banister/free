@@ -71,7 +71,7 @@ Features and limitations
 ### Caveats
 
 Benchmarks have shown that `free` can significantly improve performance, but only
-when the objects you free are very large (approximately > 50K
+when the objects you free are very large (approximately > 10K
 in size).
 
 It is not recommended you free small or medium-sized objects as you will
