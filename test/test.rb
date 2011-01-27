@@ -17,7 +17,7 @@ describe Free do
       c = v
 
       # grab the object id since referring to object directly (through
-      # c) will likely result in segfault, which can't be rescued.
+      # v) will likely result in segfault, which can't be rescued.
       id = v.object_id
 
       ObjectSpace._id2ref(id).should == v
@@ -27,7 +27,7 @@ describe Free do
 
       # Two things may happen if it is properly freed:
       # 1. The _id2ref resolves to another object (the free slot is
-      #   replace by a new object)
+      #   replaced by a new object)
       # 2. Calling _id2ref raises an exception, typically a RangeError
       (ObjectSpace._id2ref(id)  != v || lambda { ObjectSpace._id2ref(id) } rescue true).should == true
     end

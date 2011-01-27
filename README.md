@@ -8,9 +8,16 @@ _force immediate garbage collection of Ruby objects_
 free provides the `Object#free` method enabling a user to garbage
 collect an object on demand and free all its internal structures.
 
-* Install the [gem](https://rubygems.org/gems/free)
+* Install the [gem](https://rubygems.org/gems/free): `gem install free`
 * Read the [documentation](http://rdoc.info/github/banister/free/master/file/README.md)
 * See the [source code](http://github.com/banister/free)
+
+`free` also has `rubygems-test` support; to participate, first install
+free, then:
+
+1. Install rubygems-test: `gem install rubygems-test`
+2. Run the test: `gem test free`
+3. Finally choose 'Yes' to upload the results. 
 
 Example: Freeing a String
 -------------------------
@@ -57,7 +64,22 @@ Features and limitations
 * Beta software, beware.
 * Supports MRI and YARV only.
 * Not complete protection from freeing silly things, e.g core classes. Be sensible :)
-* Can be dangerous - `free` will force garbage collection on an object even if references to it still exist. Trying to access an already freed object may result in unexpected behaviour or segfaults.
+* Can be dangerous - `free` will force garbage collection on an object
+* even if references to it still exist. Trying to access an already
+* freed object may result in unexpected behaviour or segfaults.
+
+### Caveats
+
+Benchmarks have shown that `free` can significantly improve performance, but only
+when the objects you free are very large (approximately > 50K
+in size).
+
+It is not recommended you free small or medium-sized objects as you will
+actually negatively impact performance - as the `free` process itself
+incurs some overhead.
+
+In general you should benchmark your application with and without
+`free` before you decide to use it.
   
 Contact
 -------
