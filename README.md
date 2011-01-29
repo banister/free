@@ -65,8 +65,7 @@ Features and limitations
 * Supports MRI and YARV only.
 * Not complete protection from freeing silly things, e.g core classes. Be sensible :)
 * Can be dangerous - `free` will force garbage collection on an object
-* even if references to it still exist. Trying to access an already
-* freed object may result in unexpected behaviour or segfaults.
+even if references to it still exist. Trying to access an already freed object may result in unexpected behaviour or segfaults.
 
 ### Caveats
 
